@@ -27,6 +27,7 @@ namespace NotificationsMVC.Controllers
 
         public IActionResult Index()
         {
+            var devices = _notificationHubProxy.GetAllRegisteredDevices();
             return View();
         }
 

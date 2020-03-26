@@ -19,6 +19,11 @@ namespace NotificationsMVC.NotificationHubs
             _hubClient = NotificationHubClient.CreateClientFromConnectionString(_configuration.ConnectionString, _configuration.HubName);
         }
 
+        public async Task GetAllRegisteredDevices()
+        {
+            var result = await _hubClient.GetAllRegistrationsAsync(0);
+        }
+
         /// 
         /// <summary>
         /// Get registration ID from Azure Notification Hub

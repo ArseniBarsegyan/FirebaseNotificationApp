@@ -12,11 +12,6 @@ namespace FirebaseNotificationApp
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        static readonly string TAG = "MainActivity";
-
-        internal static readonly string CHANNEL_ID = "my_notification_channel";
-        internal static readonly int NOTIFICATION_ID = 100;
-
         TextView msgText;
 
         public bool IsPlayServicesAvailable()
@@ -27,7 +22,9 @@ namespace FirebaseNotificationApp
             if (resultCode != ConnectionResult.Success)
             {
                 if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+                {
                     msgText.Text = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+                }
                 else
                 {
                     msgText.Text = "This device is not supported";

@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FirebaseNotificationApp</RootNamespace>
-    <AssemblyName>FirebaseNotificationApp</AssemblyName>
+    <AssemblyName>NotificationClient.Droid</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <Deterministic>True</Deterministic>
     <AndroidApplication>True</AndroidApplication>

@@ -13,7 +13,7 @@ namespace NotificationsApi.Controllers
     [Route("[controller]")]
     public class MessagingController : ControllerBase
     {
-        private NotificationHubProxy _notificationHubProxy;
+        private readonly NotificationHubProxy _notificationHubProxy;
 
         public MessagingController(IOptions<NotificationHubConfiguration> standardNotificationHubConfiguration)
         {

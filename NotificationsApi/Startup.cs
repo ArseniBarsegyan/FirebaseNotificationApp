@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NotificationsApi.Configuration;
 
 namespace NotificationsApi
 {
@@ -15,10 +16,10 @@ namespace NotificationsApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            FirebaseApp.Create(new AppOptions
-            {
-                Credential = GoogleCredential.FromFile(@"C:\Users\a.barsegyan\Documents\FirebaseNotificationApp\NotificationsApi\pushapp-864d0-firebase-adminsdk-g8omh-237e47a4e5.json")
-            });
+            //FirebaseApp.Create(new AppOptions
+            //{
+            //    Credential = GoogleCredential.FromFile(@"C:\Users\a.barsegyan\Documents\FirebaseNotificationApp\NotificationsApi\pushapp-864d0-firebase-adminsdk-g8omh-237e47a4e5.json")
+            //});
         }
 
         public IConfiguration Configuration { get; }
@@ -26,6 +27,7 @@ namespace NotificationsApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<NotificationHubConfiguration>(Configuration.GetSection("NotificationHub"));
             services.AddControllers();
         }
 

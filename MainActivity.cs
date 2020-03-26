@@ -1,12 +1,11 @@
 ﻿using Android.App;
+using Android.Content;
+using Android.Gms.Common;
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Runtime;
 using Android.Widget;
-using Firebase.Messaging;
-using Firebase.Iid;
-using Android.Util;
-using Android.Gms.Common;
+
+using Notifications.Data;
 
 namespace FirebaseNotificationApp
 {
@@ -22,6 +21,8 @@ namespace FirebaseNotificationApp
 
         public bool IsPlayServicesAvailable()
         {
+            msgText = FindViewById<TextView>(Resource.Id.msgText);
+
             int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
             if (resultCode != ConnectionResult.Success)
             {
@@ -43,24 +44,28 @@ namespace FirebaseNotificationApp
 
         void CreateNotificationChannel()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                // Notification channels are new in API 26 (and not a part of the
-                // support library). There is no need to create a notification
-                // channel on older versions of Android.
-                return;
+                var channelName = AppConstants.NotificationChannelName;
+                var channelDescription = string.Empty;
+                var channel = new NotificationChannel(channelName, channelName, NotificationImportance.Default)
+                {
+                    Description = channelDescription
+                };
+
+                var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+                notificationManager.CreateNotificationChannel(channel);
+            }
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            if (intent.Extras != null)
+            {
+                var message = intent.GetStringExtra("message");
             }
 
-            var channel = new NotificationChannel(CHANNEL_ID,
-                                                  "FCM Notifications",
-                                                  NotificationImportance.Default)
-            {
-
-                Description = "Firebase Cloud Messages appear in this channel"
-            };
-
-            var notificationManager = (NotificationManager)GetSystemService(Android.Content.Context.NotificationService);
-            notificationManager.CreateNotificationChannel(channel);
+            base.OnNewIntent(intent);
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -68,21 +73,6 @@ namespace FirebaseNotificationApp
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_main);
-
-            msgText = FindViewById<TextView>(Resource.Id.msgText);
-            var logTokenButton = FindViewById<Button>(Resource.Id.logTokenButton);
-            logTokenButton.Click += delegate {
-                Log.Debug(TAG, "InstanceID token: " + FirebaseInstanceId.Instance.Token);
-            };
-
-            if (Intent.Extras != null)
-            {
-                foreach (var key in Intent.Extras.KeySet())
-                {
-                    var value = Intent.Extras.GetString(key);
-                    Log.Debug(TAG, "Key: {0} Value: {1}", key, value);
-                }
-            }
 
             IsPlayServicesAvailable();
             CreateNotificationChannel();

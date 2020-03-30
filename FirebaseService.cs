@@ -1,14 +1,17 @@
 ﻿using System;
-using Android.App;
-using Firebase.Iid;
-using Android.Util;
-using Firebase.Messaging;
-using WindowsAzure.Messaging;
-using Notifications.Data;
-using Android.Content;
-using Android.Support.V4.App;
-using Android.OS;
 using System.Linq;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Support.V4.App;
+using Android.Util;
+
+using Firebase.Messaging;
+
+using Notifications.Data;
+
+using WindowsAzure.Messaging;
 
 namespace FirebaseNotificationApp
 {

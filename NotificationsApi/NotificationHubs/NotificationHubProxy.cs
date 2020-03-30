@@ -11,44 +11,23 @@ namespace NotificationsApi.NotificationHubs
 {
     public class NotificationHubProxy
     {
-        private NotificationHubConfiguration _configuration;
-        private NotificationHubClient _hubClient;
+        private readonly NotificationHubClient _hubClient;
 
         public NotificationHubProxy(NotificationHubConfiguration configuration)
         {
-            _configuration = configuration;
-            _hubClient = NotificationHubClient.CreateClientFromConnectionString(_configuration.ConnectionString, _configuration.HubName);
+            _hubClient = NotificationHubClient.CreateClientFromConnectionString(configuration.ConnectionString, configuration.HubName);
         }
 
-        /// 
-        /// <summary>
-        /// Get registration ID from Azure Notification Hub
-        /// </summary>
         public async Task<string> CreateRegistrationId()
         {
             return await _hubClient.CreateRegistrationIdAsync();
         }
 
-        /// 
-        /// <summary>
-        /// Delete registration ID from Azure Notification Hub
-        /// </summary>
-        /// <param name="registrationId"></param>
         public async Task DeleteRegistration(string registrationId)
         {
             await _hubClient.DeleteRegistrationAsync(registrationId);
         }
 
-        /// 
-        /// <summary>
-        /// Register device to receive push notifications. 
-        /// Registration ID ontained from Azure Notification Hub has to be provided
-        /// Then basing on platform (Android, iOS or Windows) specific
-        /// handle (token) obtained from Push Notification Service has to be provided
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="deviceUpdate"></param>
-        /// <returns></returns>
         public async Task<HubResponse> RegisterForPushNotifications(string id, DeviceRegistration deviceUpdate)
         {
             RegistrationDescription registrationDescription = null;
@@ -76,16 +55,11 @@ namespace NotificationsApi.NotificationHubs
             }
             catch (MessagingException)
             {
-                return new HubResponse().AddErrorMessage("Registration failed because of HttpStatusCode.Gone. PLease register once again.");
+                return new HubResponse()
+                    .AddErrorMessage("Registration failed because of HttpStatusCode.Gone. PLease register once again.");
             }
         }
 
-        /// 
-        /// <summary>
-        /// Send push notification to specific platform (Android, iOS or Windows)
-        /// </summary>
-        /// <param name="newNotification"></param>
-        /// <returns></returns>
         public async Task<HubResponse<NotificationOutcome>> SendNotification(Notification newNotification)
         {
             try

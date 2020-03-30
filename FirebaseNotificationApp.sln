@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{3E51
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6FEACA0D-28DD-460C-80F2-D304D17DBE1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications.Data", "..\Notifications.Data\Notifications.Data.csproj", "{A5C33512-BDF9-40A6-A5D8-4D1694FC2844}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifications.Data", "..\Notifications.Data\Notifications.Data.csproj", "{A5C33512-BDF9-40A6-A5D8-4D1694FC2844}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationsMVC", "NotificationsMVC\NotificationsMVC.csproj", "{1FB10E76-8B97-4FCA-A869-D5D486809E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationsMVC", "NotificationsMVC\NotificationsMVC.csproj", "{1FB10E76-8B97-4FCA-A869-D5D486809E57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

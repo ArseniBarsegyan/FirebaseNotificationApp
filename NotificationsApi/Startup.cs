@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using NotificationsApi.Configuration;
-using NotificationsApi.Services;
 
 namespace NotificationsApi
 {
@@ -20,10 +19,7 @@ namespace NotificationsApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
             services.Configure<NotificationHubConfiguration>(Configuration.GetSection("NotificationHub"));
-            services.AddTransient<MessagingService>();
             services.AddControllers();
         }
 
@@ -43,9 +39,7 @@ namespace NotificationsApi
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/Host");
-                //endpoints.MapControllers();
+                endpoints.MapControllers();
             });
         }
     }

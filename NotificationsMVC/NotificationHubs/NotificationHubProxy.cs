@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Azure.NotificationHubs.Messaging;
+
 using NotificationsMVC.Configuration;
 
 namespace NotificationsMVC.NotificationHubs

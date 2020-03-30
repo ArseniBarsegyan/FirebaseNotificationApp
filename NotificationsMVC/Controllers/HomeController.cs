@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using NotificationsMVC.Configuration;
 using NotificationsMVC.Models;
 using NotificationsMVC.NotificationHubs;
@@ -38,13 +37,6 @@ namespace NotificationsMVC.Controllers
 
         public async Task<IActionResult> Notification()
         {
-            // var registrationId = await _notificationHubProxy.CreateRegistrationId();
-
-            //await _notificationHubProxy.RegisterForPushNotifications("2850911781021882943-5805015826368575877-3", new DeviceRegistration
-            //{
-            //    Platform = MobilePlatform.GoogleCloudMessaging
-            //});
-
             return View();
         }
 
@@ -54,8 +46,9 @@ namespace NotificationsMVC.Controllers
             HubResponse<NotificationOutcome> pushDeliveryResult = await _notificationHubProxy.SendNotification(newNotification);
 
             if (pushDeliveryResult.CompletedWithSuccess)
-                return Ok();
-
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return BadRequest("An error occurred while sending push notification: " + pushDeliveryResult.FormattedErrorMessages);
         }
 

@@ -1,8 +1,11 @@
 ﻿using System.Threading.Tasks;
 
-using FirebaseAdmin.Messaging;
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.NotificationHubs;
+using Microsoft.Extensions.Options;
+
+using NotificationsApi.Configuration;
+using NotificationsApi.NotificationHubs;
 
 namespace NotificationsApi.Controllers
 {
@@ -10,32 +13,47 @@ namespace NotificationsApi.Controllers
     [Route("[controller]")]
     public class MessagingController : ControllerBase
     {
-        public MessagingController()
+        private readonly NotificationHubProxy _notificationHubProxy;
+
+        public MessagingController(IOptions<NotificationHubConfiguration> standardNotificationHubConfiguration)
         {
+            _notificationHubProxy = new NotificationHubProxy(standardNotificationHubConfiguration.Value);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Get()
+        [HttpGet("register")]
+        public async Task<IActionResult> CreatePushRegistrationId()
         {
-            await SendPushNotification(null, "WebApi push", "WebApi push notification", null);
+            var registrationId = await _notificationHubProxy.CreateRegistrationId();
+            return Ok(registrationId);
+        }
+
+        [HttpDelete("unregister/{registrationId}")]
+        public async Task<IActionResult> UnregisterFromNotifications(string registrationId)
+        {
+            await _notificationHubProxy.DeleteRegistration(registrationId);
             return Ok();
         }
 
-        public static async Task<bool> SendPushNotification(string[] deviceTokens, string title, string body, object data)
+        [HttpPut("enable/{id}")]
+        public async Task<IActionResult> RegisterForPushNotifications(string id, [FromBody] DeviceRegistration deviceUpdate)
         {
-            var registrationToken = "dvV-wzqQd-w:APA91bHREZNCf0O1Vgar7KHLdRZ-INKyGZmG68D8a3HHqxOKRKk1-vZRF6LnpPTK2yrPDrSFlH44460f654m3KiJ2sxiyimmGLYrpdlf2VwQ-rEjRKKQCteMiEQXbgrzUZh7dshc02rY";
-            var message = new Message
-            {
-                Token = registrationToken,
-                Notification = new Notification
-                {
-                    Title = title,
-                    Body = body
-                }
-            };
+            HubResponse registrationResult = await _notificationHubProxy.RegisterForPushNotifications(id, deviceUpdate);
 
-            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            return true;
+            if (registrationResult.CompletedWithSuccess)
+                return Ok();
+
+            return BadRequest("An error occurred while sending push notification: " + registrationResult.FormattedErrorMessages);
+        }
+
+        [HttpPost("send")]
+        public async Task<IActionResult> SendNotification([FromBody] NotificationHubs.Notification newNotification)
+        {
+            HubResponse<NotificationOutcome> pushDeliveryResult = await _notificationHubProxy.SendNotification(newNotification);
+
+            if (pushDeliveryResult.CompletedWithSuccess)
+                return Ok();
+
+            return BadRequest("An error occurred while sending push notification: " + pushDeliveryResult.FormattedErrorMessages);
         }
     }
 }

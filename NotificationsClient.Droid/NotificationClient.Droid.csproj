@@ -124,7 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Notifications.Data\Notifications.Data.csproj">
-      <Project>{A5C33512-BDF9-40A6-A5D8-4D1694FC2844}</Project>
+      <Project>{c5bb343c-ccb4-4f12-a7f5-654e6cbd54d3}</Project>
       <Name>Notifications.Data</Name>
     </ProjectReference>
   </ItemGroup>
